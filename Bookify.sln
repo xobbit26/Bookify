@@ -4,9 +4,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{44E3CD30-676
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E880EBFC-9C8E-455A-821C-5596B3FD21E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookify.Domain", "Bookify.Domain\Bookify.Domain.csproj", "{AEBAD1C8-7975-4CB2-A705-CA20F4ABD6EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEBAD1C8-7975-4CB2-A705-CA20F4ABD6EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEBAD1C8-7975-4CB2-A705-CA20F4ABD6EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEBAD1C8-7975-4CB2-A705-CA20F4ABD6EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEBAD1C8-7975-4CB2-A705-CA20F4ABD6EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AEBAD1C8-7975-4CB2-A705-CA20F4ABD6EA} = {44E3CD30-6768-4675-8DE1-158D02C94CE5}
 	EndGlobalSection
 EndGlobal
