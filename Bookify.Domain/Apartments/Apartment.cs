@@ -10,14 +10,15 @@ public sealed class Apartment : Entity
         Description description,
         Address address,
         Money price,
-        Money cleaningFee
-    ) : base(id)
+        Money cleaningFee,
+        List<Amenity> amenities) : base(id)
     {
         Name = name;
         Description = description;
         Address = address;
         Price = price;
         CleaningFee = cleaningFee;
+        Amenities = amenities;
     }
 
     public Name Name { get; private set; }
