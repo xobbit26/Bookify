@@ -1,4 +1,4 @@
-namespace Bookify.Domain.User;
+namespace Bookify.Domain.Users;
 
 public interface IUserRepository
 {
