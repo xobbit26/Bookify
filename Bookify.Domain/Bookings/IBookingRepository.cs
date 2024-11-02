@@ -4,7 +4,7 @@ namespace Bookify.Domain.Bookings;
 
 public interface IBookingRepository
 {
-    Task<Booking> GetByIdAsync(
+    Task<Booking?> GetByIdAsync(
         Guid notificationBookingId,
         CancellationToken cancellationToken = default
     );
