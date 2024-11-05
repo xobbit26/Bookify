@@ -57,7 +57,7 @@ internal sealed class ReserveBookingCommandHandler : ICommandHandler<ReserveBook
         var booking = Booking.Reserve(apartment,
             user.Id,
             duration,
-            _dateTimeProvider.UtcNov,
+            _dateTimeProvider.UtcNow,
             _pricingService
         );
 
