@@ -23,9 +23,9 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();
         });
-        
+
         return services;
     }
 }
