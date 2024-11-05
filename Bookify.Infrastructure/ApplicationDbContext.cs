@@ -11,4 +11,11 @@ internal sealed class ApplicationDbContext(DbContextOptions options) : DbContext
     //     var result = await base.SaveChangesAsync(cancellationToken);
     //     return result;
     // }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        base.OnModelCreating(modelBuilder);
+    }
 }
