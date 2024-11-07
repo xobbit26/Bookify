@@ -1,21 +1,46 @@
 using Bookify.Domain.Abstractions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookify.Infrastructure;
 
-internal sealed class ApplicationDbContext(DbContextOptions options) : DbContext(options), IUnitOfWork
+internal sealed class ApplicationDbContext(DbContextOptions options, IPublisher publisher)
+    : DbContext(options), IUnitOfWork
 {
-    //This method is implemented in DbContext, that's why compiler doesn't require to implement it in the current class
-    // public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    // {
-    //     var result = await base.SaveChangesAsync(cancellationToken);
-    //     return result;
-    // }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        await PublishDomainEventAsync();
+
+        return result;
+    } 
+
+    private async Task PublishDomainEventAsync()
+    {
+        var domainEvents = ChangeTracker
+            .Entries<Entity>()
+            .Select(entry => entry.Entity)
+            .SelectMany(entity =>
+            {
+                var domainEvents = entity.GetDomainEvents();
+
+                entity.ClearDomainEvents();
+
+                return domainEvents;
+            })
+            .ToList();
+
+        foreach (var domainEvent in domainEvents)
+        {
+            await publisher.Publish(domainEvent);
+        }
     }
 }
