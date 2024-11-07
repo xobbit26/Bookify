@@ -1,3 +1,5 @@
+using System.Data;
+using Bookify.Application.Exceptions;
 using Bookify.Domain.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +18,19 @@ internal sealed class ApplicationDbContext(DbContextOptions options, IPublisher 
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        var result = await base.SaveChangesAsync(cancellationToken);
+        try
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
 
-        await PublishDomainEventAsync();
+            await PublishDomainEventAsync();
 
-        return result;
-    } 
+            return result;
+        }
+        catch (DBConcurrencyException e)
+        {
+            throw new ConcurrencyException("Concurrency exception occured.", e);
+        }
+    }
 
     private async Task PublishDomainEventAsync()
     {
