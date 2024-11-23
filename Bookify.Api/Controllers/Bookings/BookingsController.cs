@@ -16,7 +16,7 @@ public class BookingsController(ISender sender) : ControllerBase
 
         var result = await sender.Send(query, cancellationToken);
 
-        return result.IsSuccess ? Ok(result.Value()) : NotFound();
+        return result.IsSuccess ? Ok(result.Value) : NotFound();
     }
 
     [HttpPost]
@@ -31,14 +31,14 @@ public class BookingsController(ISender sender) : ControllerBase
             request.StartDate,
             request.EndDate
         );
-        
+
         var result = await sender.Send(reserveBookingCommand, cancellationToken);
 
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
-        
-        return CreatedAtAction(nameof(GetBooking), new {id = result.Value()}, result.Value());
+
+        return CreatedAtAction(nameof(GetBooking), new {id = result.Value}, result.Value);
     }
 }
