@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookify.Infrastructure;
 
-internal sealed class ApplicationDbContext(DbContextOptions options, IPublisher publisher)
+public sealed class ApplicationDbContext(DbContextOptions options, IPublisher publisher)
     : DbContext(options), IUnitOfWork
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
