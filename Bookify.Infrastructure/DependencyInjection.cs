@@ -26,8 +26,7 @@ public static class DependencyInjection
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         services.AddTransient<IEmailService, EmailService>();
 
-        var connectionString = configuration.GetConnectionString("Database")
-                               ?? throw new ArgumentNullException(nameof(configuration));
+        var connectionString = GetConnectionString(configuration);
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {
@@ -44,5 +43,34 @@ public static class DependencyInjection
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
         return services;
+    }
+
+    /// <summary>
+    /// Retrieves the connection string from the configuration file and replaces placeholders with environmental variables.
+    /// </summary>
+    /// <param name="configuration">The configuration instance that provides access to the configuration settings.</param>
+    /// <returns>The formatted connection string with the placeholders replaced by actual values.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the connection string is null or empty.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when any of the required environment variables (DB_NAME, DB_USER, DB_PASSWORD) are not set.</exception>
+    private static string GetConnectionString(IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("Database")
+                               ?? throw new ArgumentNullException(nameof(configuration));
+
+        var dbName = Environment.GetEnvironmentVariable("DB_NAME") ??
+                     throw new InvalidOperationException("DB_NAME is not set.");
+
+        var dbUser = Environment.GetEnvironmentVariable("DB_USER") ??
+                     throw new InvalidOperationException("DB_USER is not set.");
+
+        var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ??
+                         throw new InvalidOperationException("DB_PASSWORD is not set.");
+
+        connectionString = connectionString
+            .Replace("${DB_NAME}", dbName)
+            .Replace("${DB_USER}", dbUser)
+            .Replace("${DB_PASSWORD}", dbPassword);
+
+        return connectionString;
     }
 }
