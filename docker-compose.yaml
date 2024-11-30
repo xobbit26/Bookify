@@ -13,7 +13,7 @@
       - DB_PASSWORD=${DB_PASSWORD}
     ports:
       - "80:80"
-#      - "5001:443"
+    #      - "5001:443"
     depends_on:
       - bookify-db
   
@@ -27,4 +27,19 @@
     ports:
       - "5432:5432"
     volumes:
+      # local path:path in container
       - ~/docker/volumes/bookify-db:/var/lib/postgresql/data
+  
+  bookify-idp:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: Bookify.Identity
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD={KEYCLOAK_ADMIN_PASSWORD}
+    ports:
+      - "18080:8080"
+    volumes:
+      # local path:path in container
+      - /Users/xobbit_26/Projects/Bookify/keycloak/keycloak-data:/opt/keycloak/data
+      - /Users/xobbit_26/Projects/Bookify/keycloak/bookify-realm-export.json:/opt/keycloak/data/import/realm.json
