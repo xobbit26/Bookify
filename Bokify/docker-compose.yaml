@@ -21,14 +21,14 @@
     image: postgres:alpine
     container_name: Bookify.Db
     environment:
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       # local path:path in container
-      - ~/docker/volumes/bookify-db:/var/lib/postgresql/data
+      - ~/docker/volumes/bookify-db:/var/lib/postgresql
   
   bookify-idp:
     image: quay.io/keycloak/keycloak:21.1.1
@@ -41,5 +41,5 @@
       - "18080:8080"
     volumes:
       # local path:path in container
-      - /Users/xobbit_26/Projects/Bookify/keycloak/keycloak-data:/opt/keycloak/data
-      - /Users/xobbit_26/Projects/Bookify/keycloak/bookify-realm-export.json:/opt/keycloak/data/import/realm.json
+      # keycloak-data must also contain an import/realm.json for --import-realm to pick up
+      - ./keycloak/keycloak-data:/opt/keycloak/data
